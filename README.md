@@ -13,6 +13,8 @@ No extra parsing needed.
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![FOSSA Status][fossa-image]][fossa-url]
 
+**🔒 Security:** See [SECURITY.md](SECURITY.md) | **🏛️ Governance:** [TPCF.md](TPCF.md) | **👥 Maintainers:** [MAINTAINERS.md](MAINTAINERS.md)
+
 <p align="center">
 <a href="https://www.buymeacoffee.com/mashpie" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important; border-radius: 0.5rem !important;" width="217" height="51"></a><br>
 </p>
