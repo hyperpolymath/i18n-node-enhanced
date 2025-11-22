@@ -1,0 +1,52 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+# security.txt - RFC 9116 Compliant Security Contact Information
+# https://securitytxt.org/
+
+Contact: security@i18n-node-enhanced.org
+Contact: https://github.com/mashpie/i18n-node/security/advisories/new
+Expires: 2026-12-31T23:59:59.000Z
+Encryption: https://keys.openpgp.org/search?q=security@i18n-node-enhanced.org
+Preferred-Languages: en, de, fr, es, ja
+Canonical: https://i18n-node-enhanced.org/.well-known/security.txt
+
+# Security Policy
+Policy: https://github.com/mashpie/i18n-node/blob/main/SECURITY.md
+
+# Acknowledgments
+Acknowledgments: https://github.com/mashpie/i18n-node/blob/main/SECURITY.md#hall-of-fame
+
+# Responsible Disclosure
+# We follow a 90-day coordinated disclosure policy.
+# Critical vulnerabilities: 24-48 hour response time
+# High severity: 7 day response time
+# Medium/Low: 30 day response time
+
+# Scope
+# In scope:
+# - Core i18n library (i18n.js, index.js)
+# - Enterprise adapters (adapters/*)
+# - Automation API (automation/api.js)
+# - Audit system (audit/forensics.js)
+# - WASM core (wasm/*)
+# - ReScript bindings (bindings/rescript/*)
+# - Deno module (deno/*)
+#
+# Out of scope:
+# - Examples (examples/*) - for reference only
+# - Documentation
+# - Test fixtures
+
+# Known Vulnerabilities
+# See: https://github.com/mashpie/i18n-node/security/advisories
+
+# Bug Bounty
+# Bug bounty program: Not currently available
+# Hall of Fame: Available for responsible disclosures
+
+-----BEGIN PGP SIGNATURE-----
+
+[Signature would be added after key generation]
+
+-----END PGP SIGNATURE-----

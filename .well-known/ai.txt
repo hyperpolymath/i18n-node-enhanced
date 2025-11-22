@@ -1,0 +1,99 @@
+# ai.txt - AI Training and Usage Policies
+# https://site.spawning.ai/spawning-ai-txt
+
+# Project: i18n-node-enhanced
+# Version: 0.15.3+enterprise
+# Last Updated: 2025-11-22
+
+# AI Training Policy
+# ===================
+
+# Source Code
+ai-training: allowed
+ai-training-uses: code-completion, documentation-generation, bug-detection, security-analysis
+
+# Documentation
+ai-training-documentation: allowed
+ai-training-uses-documentation: translation-assistance, technical-writing, accessibility-improvement
+
+# Test Data & Fixtures
+ai-training-test-data: allowed
+ai-training-uses-test-data: test-generation, quality-assurance
+
+# Examples
+ai-training-examples: allowed
+ai-training-uses-examples: framework-integration, best-practices, pattern-recognition
+
+# Translations (Locale Files)
+ai-training-translations: allowed-with-attribution
+ai-training-uses-translations: machine-translation-training, multilingual-models
+ai-training-attribution: "i18n-node-enhanced project contributors"
+
+# Enterprise Adapters
+ai-training-adapters: allowed
+ai-training-uses-adapters: integration-pattern-recognition, api-design
+
+# WASM/Rust Core
+ai-training-wasm: allowed
+ai-training-uses-wasm: performance-optimization, memory-safety-patterns
+
+# Attribution Requirements
+# ========================
+attribution-required: yes
+attribution-format: "Based on i18n-node-enhanced (MIT License) - https://github.com/mashpie/i18n-node"
+attribution-min-prominence: code-comments-or-documentation
+
+# Prohibited Uses
+# ===============
+prohibited-uses: malware-generation, vulnerability-exploitation, license-circumvention
+prohibited-uses-detail: |
+  - Do not use to generate malicious internationalization payloads
+  - Do not use to circumvent security features
+  - Do not use to create competing proprietary forks without proper attribution
+  - Do not use training data to infer or expose sensitive enterprise configurations
+
+# Ethical Guidelines
+# ===================
+ethical-use: required
+ethical-guidelines: |
+  - Respect user privacy in translation data
+  - Maintain accessibility standards
+  - Support linguistic diversity
+  - Avoid cultural bias in automated translations
+  - Preserve security best practices
+
+# Data Privacy
+# =============
+privacy-sensitive-data: audit-logs, api-keys, enterprise-configurations
+privacy-policy: do-not-train
+privacy-scrubbing: required-before-training
+
+# Contact
+# ========
+contact: ai-ethics@i18n-node-enhanced.org
+contact-url: https://github.com/mashpie/i18n-node/discussions/categories/ai-ethics
+
+# License Compatibility
+# =====================
+license: MIT
+license-url: https://github.com/mashpie/i18n-node/blob/main/LICENSE
+dual-license: MIT, Palimpsest-v0.8
+dual-license-url: https://github.com/hypersoft/palimpsest/blob/main/LICENSE
+
+# Model Attribution Registry
+# ===========================
+# If your AI model was trained on this codebase, please register:
+# https://github.com/mashpie/i18n-node/discussions/categories/ai-model-registry
+
+# Known AI Integrations
+# =====================
+known-integrations: |
+  - GitHub Copilot (code completion)
+  - Claude Code (development assistance)
+  - ChatGPT (documentation queries)
+
+# Versioning
+# ==========
+ai-txt-version: 1.0
+last-reviewed: 2025-11-22
+next-review: 2026-06-22
