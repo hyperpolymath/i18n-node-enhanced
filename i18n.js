@@ -1390,7 +1390,7 @@ const i18n = function I18n(_OPTS = false) {
    * basic normalization of filepath
    */
   const getStorageFilePath = (locale) => {
-    // Security: validate locale to prevent path traversal attacks
+    // Security: validate locale strictly to prevent path traversal attacks
     if (!isSafeLocale(locale)) {
       logError('Invalid locale format: ' + locale)
       return null
@@ -1401,20 +1401,34 @@ const i18n = function I18n(_OPTS = false) {
     const filepathJS = path.normalize(
       directory + pathsep + prefix + locale + '.js'
     )
-    // Security: ensure the resolved path is within the expected directory
+    // Security: ensure the resolved path is strictly within the expected directory
     const resolvedDir = path.resolve(directory)
     const resolvedPath = path.resolve(filepath)
     const resolvedPathJS = path.resolve(filepathJS)
-    if (!resolvedPath.startsWith(resolvedDir + path.sep) && resolvedPath !== resolvedDir) {
+    if (
+      !(resolvedPath.startsWith(resolvedDir + path.sep) && resolvedPath.length > resolvedDir.length)
+    ) {
       logError('Path traversal attempt detected for locale: ' + locale)
       return null
     }
     // use .js as fallback if already existing
     try {
-      if (resolvedPathJS.startsWith(resolvedDir + path.sep) && fs.statSync(filepathJS)) {
+      if (
+        resolvedPathJS.startsWith(resolvedDir + path.sep) &&
+        resolvedPathJS.length > resolvedDir.length &&
+        fs.statSync(filepathJS)
+      ) {
         logDebug('using existing file ' + filepathJS)
         extension = '.js'
         return filepathJS
+   * Strict locale format validation
+   */
+  function isSafeLocale(locale) {
+    // Allows only alphanumeric, - and _ (common for locale codes)
+    return typeof locale === 'string' && /^[a-zA-Z0-9_-]+$/.test(locale)
+  }
+
+  /**
       }
     } catch (e) {
       logDebug('will use ' + filepath)
