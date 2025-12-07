@@ -33,15 +33,7 @@ package Polyglot_TUI.Catalog is
    end record
       with Dynamic_Predicate => Catalog.Count <= Max_Keys;
 
-   --  Catalog construction
-   function Empty (Locale : Locale_String) return Catalog
-      with Post => Empty'Result.Count = 0 and
-                   Empty'Result.Locale = Locale;
-
    --  Catalog operations
-   function Get_Locale (Cat : Catalog) return Locale_String
-      with Post => Get_Locale'Result = Cat.Locale;
-
    function Is_Empty (Cat : Catalog) return Boolean
       with Post => Is_Empty'Result = (Cat.Count = 0);
 

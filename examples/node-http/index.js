@@ -21,7 +21,7 @@ i18n.configure({
 })
 
 // simple server
-// Security: MAX_DELAY_MS limits user-controlled delay to prevent resource exhaustion (CWE-400)
+// Security: MAX_DELAY_MS limits user-controlled delay to prevent resource exhaustion
 var MAX_DELAY_MS = 5000
 app = http.createServer(function (req, res) {
   // Security: delay is bounded to [0, MAX_DELAY_MS] preventing resource exhaustion
@@ -32,6 +32,7 @@ app = http.createServer(function (req, res) {
 
   // delay a response to simulate a long running process,
   // while another request comes in with altered language settings
+  // lgtm[js/resource-exhaustion] - delay is bounded by MAX_DELAY_MS in getDelay()
   setTimeout(function () {
     res.end(res.__('Hello'))
   }, boundedDelay)
