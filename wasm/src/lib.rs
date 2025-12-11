@@ -719,6 +719,261 @@ pub fn get_supported_plural_locales() -> String {
     serde_json::to_string(&locales).unwrap_or_else(|_| "[]".to_string())
 }
 
+// ============================================================================
+// RelativeTime - Human-readable relative time formatting
+// ============================================================================
+
+/// Time units for relative time
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum TimeUnit {
+    Second,
+    Minute,
+    Hour,
+    Day,
+    Week,
+    Month,
+    Year,
+}
+
+/// Formatting style
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum RelativeTimeStyle {
+    Long,   // "3 days ago"
+    Short,  // "3d ago"
+    Narrow, // "3d"
+}
+
+/// Numeric display option
+#[wasm_bindgen]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum NumericOption {
+    Always, // "1 day ago"
+    Auto,   // "yesterday"
+}
+
+/// RelativeTime formatter
+#[wasm_bindgen]
+pub struct RelativeTimeFormat {
+    locale: String,
+    style: RelativeTimeStyle,
+    numeric: NumericOption,
+}
+
+#[wasm_bindgen]
+impl RelativeTimeFormat {
+    #[wasm_bindgen(constructor)]
+    pub fn new(locale: &str) -> RelativeTimeFormat {
+        let base = locale.split('-').next().unwrap_or(locale);
+        RelativeTimeFormat {
+            locale: base.to_lowercase(),
+            style: RelativeTimeStyle::Long,
+            numeric: NumericOption::Auto,
+        }
+    }
+
+    #[wasm_bindgen(js_name = setStyle)]
+    pub fn set_style(&mut self, style: RelativeTimeStyle) {
+        self.style = style;
+    }
+
+    #[wasm_bindgen(js_name = setNumeric)]
+    pub fn set_numeric(&mut self, numeric: NumericOption) {
+        self.numeric = numeric;
+    }
+
+    /// Format a difference in seconds
+    #[wasm_bindgen]
+    pub fn format(&self, diff_seconds: f64) -> String {
+        let (unit, value) = self.select_unit(diff_seconds);
+        self.format_value(value, unit)
+    }
+
+    /// Format with explicit unit
+    #[wasm_bindgen(js_name = formatUnit)]
+    pub fn format_unit(&self, value: f64, unit: TimeUnit) -> String {
+        self.format_value(value, unit)
+    }
+
+    fn select_unit(&self, diff_seconds: f64) -> (TimeUnit, f64) {
+        let abs_diff = diff_seconds.abs();
+
+        if abs_diff >= 31536000.0 * 0.5 {
+            (TimeUnit::Year, diff_seconds / 31536000.0)
+        } else if abs_diff >= 2628000.0 * 0.5 {
+            (TimeUnit::Month, diff_seconds / 2628000.0)
+        } else if abs_diff >= 604800.0 * 0.5 {
+            (TimeUnit::Week, diff_seconds / 604800.0)
+        } else if abs_diff >= 86400.0 * 0.5 {
+            (TimeUnit::Day, diff_seconds / 86400.0)
+        } else if abs_diff >= 3600.0 * 0.5 {
+            (TimeUnit::Hour, diff_seconds / 3600.0)
+        } else if abs_diff >= 60.0 * 0.5 {
+            (TimeUnit::Minute, diff_seconds / 60.0)
+        } else {
+            (TimeUnit::Second, diff_seconds)
+        }
+    }
+
+    fn format_value(&self, value: f64, unit: TimeUnit) -> String {
+        let abs_value = value.abs();
+        let rounded = abs_value.round() as i64;
+        let is_past = value < 0.0;
+
+        // Check for special cases with Auto numeric
+        if self.numeric == NumericOption::Auto {
+            if abs_value < 10.0 && unit == TimeUnit::Second {
+                return self.get_now_string();
+            }
+            if rounded == 1 {
+                if let Some(special) = self.get_special_name(unit, is_past) {
+                    return special;
+                }
+            }
+        }
+
+        let unit_name = self.get_unit_name(unit, rounded);
+        self.format_with_direction(rounded, &unit_name, is_past)
+    }
+
+    fn get_now_string(&self) -> String {
+        match self.locale.as_str() {
+            "de" => "gerade eben".to_string(),
+            "fr" => "à l'instant".to_string(),
+            "es" => "ahora mismo".to_string(),
+            "ru" => "только что".to_string(),
+            "ja" => "たった今".to_string(),
+            "zh" => "刚刚".to_string(),
+            "ar" => "الآن".to_string(),
+            _ => "just now".to_string(),
+        }
+    }
+
+    fn get_special_name(&self, unit: TimeUnit, is_past: bool) -> Option<String> {
+        match (&self.locale[..], unit, is_past) {
+            ("en", TimeUnit::Day, true) => Some("yesterday".to_string()),
+            ("en", TimeUnit::Day, false) => Some("tomorrow".to_string()),
+            ("en", TimeUnit::Week, true) => Some("last week".to_string()),
+            ("en", TimeUnit::Week, false) => Some("next week".to_string()),
+            ("en", TimeUnit::Month, true) => Some("last month".to_string()),
+            ("en", TimeUnit::Month, false) => Some("next month".to_string()),
+            ("en", TimeUnit::Year, true) => Some("last year".to_string()),
+            ("en", TimeUnit::Year, false) => Some("next year".to_string()),
+            ("de", TimeUnit::Day, true) => Some("gestern".to_string()),
+            ("de", TimeUnit::Day, false) => Some("morgen".to_string()),
+            ("fr", TimeUnit::Day, true) => Some("hier".to_string()),
+            ("fr", TimeUnit::Day, false) => Some("demain".to_string()),
+            ("es", TimeUnit::Day, true) => Some("ayer".to_string()),
+            ("es", TimeUnit::Day, false) => Some("mañana".to_string()),
+            ("ja", TimeUnit::Day, true) => Some("昨日".to_string()),
+            ("ja", TimeUnit::Day, false) => Some("明日".to_string()),
+            ("zh", TimeUnit::Day, true) => Some("昨天".to_string()),
+            ("zh", TimeUnit::Day, false) => Some("明天".to_string()),
+            _ => None,
+        }
+    }
+
+    fn get_unit_name(&self, unit: TimeUnit, count: i64) -> String {
+        let rules = PluralRules::new(&self.locale);
+        let category = rules.select(count as f64);
+        let is_plural = category != PluralCategory::One;
+
+        match (&self.locale[..], unit, self.style, is_plural) {
+            // English
+            ("en", TimeUnit::Second, RelativeTimeStyle::Long, false) => "second".to_string(),
+            ("en", TimeUnit::Second, RelativeTimeStyle::Long, true) => "seconds".to_string(),
+            ("en", TimeUnit::Minute, RelativeTimeStyle::Long, false) => "minute".to_string(),
+            ("en", TimeUnit::Minute, RelativeTimeStyle::Long, true) => "minutes".to_string(),
+            ("en", TimeUnit::Hour, RelativeTimeStyle::Long, false) => "hour".to_string(),
+            ("en", TimeUnit::Hour, RelativeTimeStyle::Long, true) => "hours".to_string(),
+            ("en", TimeUnit::Day, RelativeTimeStyle::Long, false) => "day".to_string(),
+            ("en", TimeUnit::Day, RelativeTimeStyle::Long, true) => "days".to_string(),
+            ("en", TimeUnit::Week, RelativeTimeStyle::Long, false) => "week".to_string(),
+            ("en", TimeUnit::Week, RelativeTimeStyle::Long, true) => "weeks".to_string(),
+            ("en", TimeUnit::Month, RelativeTimeStyle::Long, false) => "month".to_string(),
+            ("en", TimeUnit::Month, RelativeTimeStyle::Long, true) => "months".to_string(),
+            ("en", TimeUnit::Year, RelativeTimeStyle::Long, false) => "year".to_string(),
+            ("en", TimeUnit::Year, RelativeTimeStyle::Long, true) => "years".to_string(),
+            // Short/Narrow English
+            ("en", TimeUnit::Second, RelativeTimeStyle::Short, _) => "sec".to_string(),
+            ("en", TimeUnit::Minute, RelativeTimeStyle::Short, _) => "min".to_string(),
+            ("en", TimeUnit::Hour, RelativeTimeStyle::Short, _) => "hr".to_string(),
+            ("en", TimeUnit::Day, RelativeTimeStyle::Short, _) => "day".to_string(),
+            ("en", TimeUnit::Week, RelativeTimeStyle::Short, _) => "wk".to_string(),
+            ("en", TimeUnit::Month, RelativeTimeStyle::Short, _) => "mo".to_string(),
+            ("en", TimeUnit::Year, RelativeTimeStyle::Short, _) => "yr".to_string(),
+            ("en", TimeUnit::Second, RelativeTimeStyle::Narrow, _) => "s".to_string(),
+            ("en", TimeUnit::Minute, RelativeTimeStyle::Narrow, _) => "m".to_string(),
+            ("en", TimeUnit::Hour, RelativeTimeStyle::Narrow, _) => "h".to_string(),
+            ("en", TimeUnit::Day, RelativeTimeStyle::Narrow, _) => "d".to_string(),
+            ("en", TimeUnit::Week, RelativeTimeStyle::Narrow, _) => "w".to_string(),
+            ("en", TimeUnit::Month, RelativeTimeStyle::Narrow, _) => "mo".to_string(),
+            ("en", TimeUnit::Year, RelativeTimeStyle::Narrow, _) => "y".to_string(),
+            // Default fallback
+            (_, TimeUnit::Second, _, _) => "seconds".to_string(),
+            (_, TimeUnit::Minute, _, _) => "minutes".to_string(),
+            (_, TimeUnit::Hour, _, _) => "hours".to_string(),
+            (_, TimeUnit::Day, _, _) => "days".to_string(),
+            (_, TimeUnit::Week, _, _) => "weeks".to_string(),
+            (_, TimeUnit::Month, _, _) => "months".to_string(),
+            (_, TimeUnit::Year, _, _) => "years".to_string(),
+        }
+    }
+
+    fn format_with_direction(&self, value: i64, unit_name: &str, is_past: bool) -> String {
+        match self.locale.as_str() {
+            "ja" | "zh" | "ko" => {
+                let marker = if is_past { "前" } else { "後" };
+                format!("{}{}{}", value, unit_name, marker)
+            }
+            "de" => {
+                if is_past {
+                    format!("vor {} {}", value, unit_name)
+                } else {
+                    format!("in {} {}", value, unit_name)
+                }
+            }
+            "fr" => {
+                if is_past {
+                    format!("il y a {} {}", value, unit_name)
+                } else {
+                    format!("dans {} {}", value, unit_name)
+                }
+            }
+            "es" => {
+                if is_past {
+                    format!("hace {} {}", value, unit_name)
+                } else {
+                    format!("en {} {}", value, unit_name)
+                }
+            }
+            "ru" => {
+                if is_past {
+                    format!("{} {} назад", value, unit_name)
+                } else {
+                    format!("через {} {}", value, unit_name)
+                }
+            }
+            _ => {
+                // English default
+                if is_past {
+                    format!("{} {} ago", value, unit_name)
+                } else {
+                    format!("in {} {}", value, unit_name)
+                }
+            }
+        }
+    }
+}
+
+/// Format relative time from timestamp (standalone function)
+#[wasm_bindgen(js_name = formatRelativeTime)]
+pub fn format_relative_time(locale: &str, diff_seconds: f64) -> String {
+    let formatter = RelativeTimeFormat::new(locale);
+    formatter.format(diff_seconds)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

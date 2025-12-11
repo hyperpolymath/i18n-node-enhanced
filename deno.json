@@ -1,32 +1,32 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "name": "@polyglot/i18n",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0-beta",
   "exports": {
     ".": "./src/lib/es6/src/mod.res.mjs",
     "./i18n": "./src/lib/es6/src/core/I18n.res.mjs",
     "./locale": "./src/lib/es6/src/core/Locale.res.mjs",
     "./catalog": "./src/lib/es6/src/core/Catalog.res.mjs",
-    "./plural": "./src/lib/es6/src/core/Plural.res.mjs"
+    "./plural": "./src/lib/es6/src/core/Plural.res.mjs",
+    "./relative-time": "./src/lib/es6/src/core/RelativeTime.res.mjs"
   },
   "publish": {
     "include": [
       "src/lib/es6/",
       "wasm/pkg/",
       "locales/",
-      "LICENSE",
+      "LICENSE.txt",
       "README.adoc"
     ],
     "exclude": [
       "**/*.test.mjs",
-      "**/*_test.mjs",
-      "node_modules/"
+      "**/*_test.mjs"
     ]
   },
   "tasks": {
-    "build": "cd src && npx rescript build",
-    "build:watch": "cd src && npx rescript build -w",
-    "clean": "cd src && npx rescript clean",
+    "build": "cd src && rescript build",
+    "build:watch": "cd src && rescript build -w",
+    "clean": "cd src && rescript clean",
     "wasm:build": "cd wasm && cargo build --release --target wasm32-unknown-unknown",
     "wasm:pack": "cd wasm && wasm-pack build --target web",
     "test": "deno test --allow-read --allow-write --parallel",
@@ -62,23 +62,19 @@
     "semiColons": false,
     "singleQuote": true,
     "proseWrap": "preserve",
-    "include": ["src/lib/es6/"],
-    "exclude": ["node_modules/"]
+    "include": ["src/lib/es6/"]
   },
   "lint": {
     "include": ["src/lib/es6/"],
-    "exclude": ["node_modules/"],
     "rules": {
       "tags": ["recommended"]
     }
   },
   "test": {
-    "include": ["tests/**/*_test.mjs", "tests/**/*.test.mjs"],
-    "exclude": ["node_modules/"]
+    "include": ["tests/**/*_test.mjs", "tests/**/*.test.mjs"]
   },
   "bench": {
-    "include": ["benchmarks/**/*_bench.mjs", "benchmarks/**/*.bench.mjs"],
-    "exclude": ["node_modules/"]
+    "include": ["benchmarks/**/*_bench.mjs", "benchmarks/**/*.bench.mjs"]
   },
   "lock": "./deno.lock",
   "unstable": ["ffi"]
