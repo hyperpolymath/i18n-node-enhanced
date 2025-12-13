@@ -43,10 +43,15 @@
 ;;;
 
 (define session-context
-  '((branch . "claude/create-state-scm-01XaAo5E8reTup5mJaK56Jg1")
-    (task . "Create STATE.scm documenting project position and roadmap")
+  '((branch . "main")
+    (task . "OpenSSF Scorecard workflow fixes")
     (working-directory . "/home/user/polyglot-i18n")
-    (git-status . clean)))
+    (git-status . clean)
+    (last-session . "2025-12-13")
+    (completed-this-session
+     ((task . "OpenSSF Scorecard workflow fixes")
+      (files . 20)
+      (fixes . ("permissions: read-all" "SHA-pinned actions" "SPDX headers"))))))
 
 ;;;
 ;;; Focus
