@@ -1,177 +1,79 @@
-# ═══════════════════════════════════════════════════════════════════════════════
-# polyglot-i18n .gitignore
-# ═══════════════════════════════════════════════════════════════════════════════
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# RSR-compliant .gitignore
 
-# ─────────────────────────────────────────────────────────────────────────────────
-# Dependencies
-# ─────────────────────────────────────────────────────────────────────────────────
-node_modules/
-.pnpm-store/
-.yarn/
-.npm/
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Build outputs
-# ─────────────────────────────────────────────────────────────────────────────────
-dist/
-build/
-out/
-lib/
-*.tsbuildinfo
-
-# ReScript
-bindings/rescript/lib/
-bindings/rescript/.bsb.lock
-bindings/rescript/.merlin
-*.bs.js
-*.gen.tsx
-
-# Rust/WASM
-wasm/target/
-wasm/pkg/
-wasm/Cargo.lock
-*.wasm
-*.wat
-
-# Deno
-deno/.deno/
-.deno/
-deno.lock
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Testing & Coverage
-# ─────────────────────────────────────────────────────────────────────────────────
-coverage/
-.nyc_output/
-*.lcov
-.coverage
-htmlcov/
-test-report.json
-test-results/
-junit.xml
-
-# Test locale directories (generated during tests)
-testlocales/
-defaultlocales/
-localestowrite/
-localesmakeplural/
-locales_traversal/is/not/possible/en.json
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# IDE & Editors
-# ─────────────────────────────────────────────────────────────────────────────────
-.idea/
-.vscode/
+# OS & Editor
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
-*.sublime-workspace
-*.sublime-project
-.project
-.classpath
-.settings/
-*.code-workspace
+.idea/
+.vscode/
 
-# ─────────────────────────────────────────────────────────────────────────────────
-# OS Files
-# ─────────────────────────────────────────────────────────────────────────────────
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Desktop.ini
+# Build
+/target/
+/_build/
+/build/
+/dist/
+/out/
 
-# ─────────────────────────────────────────────────────────────────────────────────
-# Logs & Debug
-# ─────────────────────────────────────────────────────────────────────────────────
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-.pnpm-debug.log*
+# Dependencies
+/node_modules/
+/vendor/
+/deps/
+/.elixir_ls/
 
-# ─────────────────────────────────────────────────────────────────────────────────
-# Runtime & Cache
-# ─────────────────────────────────────────────────────────────────────────────────
-.cache/
-.parcel-cache/
-.turbo/
-.eslintcache
-.stylelintcache
-*.tgz
+# Rust
+# Cargo.lock  # Keep for binaries
+
+# Elixir
+/cover/
+/doc/
+*.ez
+erl_crash.dump
+
+# Julia
+*.jl.cov
+*.jl.mem
+/Manifest.toml
+
+# ReScript
+/lib/bs/
+/.bsb.lock
+
+# Python (SaltStack only)
+__pycache__/
+*.py[cod]
+.venv/
+
+# Ada/SPARK
+*.ali
+/obj/
+/bin/
+
+# Haskell
+/.stack-work/
+/dist-newstyle/
+
+# Chapel
+*.chpl.tmp.*
+
+# Secrets
 .env
-.env.local
-.env.*.local
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Containers
-# ─────────────────────────────────────────────────────────────────────────────────
-*.tar
-*.tar.gz
-container/*.tar
-sbom.json
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Guix/Nix
-# ─────────────────────────────────────────────────────────────────────────────────
-/gnu/
-/result
-/result-*
-.guix-profile
-.guix-gc-roots/
-*.drv
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Nickel
-# ─────────────────────────────────────────────────────────────────────────────────
-config/*.json
-!config/schema.json
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Documentation
-# ─────────────────────────────────────────────────────────────────────────────────
-docs/_site/
-docs/api/
-.docusaurus/
-man/man1/*.1
-!man/man1/.gitkeep
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Profiling
-# ─────────────────────────────────────────────────────────────────────────────────
-*.cpuprofile
-*.heapprofile
-*.heapsnapshot
-isolate-*.log
-.profiles/
-profile.txt
-flamegraph.svg
-
-# ─────────────────────────────────────────────────────────────────────────────────
-# Security & Secrets
-# ─────────────────────────────────────────────────────────────────────────────────
+.env.*
 *.pem
 *.key
-*.p12
-*.pfx
-cosign.key
-cosign.pub
-.secrets/
+secrets/
 
-# ─────────────────────────────────────────────────────────────────────────────────
-# Misc
-# ─────────────────────────────────────────────────────────────────────────────────
-*.bak
-*.backup
-*.orig
-*.temp
+# Test/Coverage
+/coverage/
+htmlcov/
+
+# Logs
+*.log
+/logs/
+
+# Temp
+/tmp/
 *.tmp
-.*.sw?
-\#*\#
-rsr-report.txt
-rsr-compliance-report.txt
+*.bak
