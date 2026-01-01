@@ -198,8 +198,11 @@ class I18nAutomationAPI {
       }
 
       try {
-        // Log modifications
-        Object.entries(updates).forEach(([key, value]) => {
+        // Security: Filter out dangerous keys to prevent prototype pollution
+        const safeUpdates = Object.entries(updates).filter(([key]) => isSafeKey(key));
+
+        // Log modifications (only safe keys)
+        safeUpdates.forEach(([key, value]) => {
           this.audit.logCatalogModification({
             locale,
             operation: 'update',
@@ -214,7 +217,8 @@ class I18nAutomationAPI {
           success: true,
           data: {
             locale,
-            updated: Object.keys(updates).length
+            updated: safeUpdates.length,
+            skipped: Object.keys(updates).length - safeUpdates.length
           }
         });
       } catch (error) {
