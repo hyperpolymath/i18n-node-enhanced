@@ -1,6 +1,9 @@
 = polyglot-i18n
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
+image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[MPL-2.0,link="https://opensource.org/licenses/MPL-2.0"]
+image:https://img.shields.io/badge/Philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
+
+
 :author: Jonathan D.A. Jewell
 :email: jonathan.jewell@gmail.com
 :toc: macro
@@ -16,7 +19,6 @@ image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="htt
 A ReScript-first, enterprise-grade internationalization framework with WASM acceleration, NLP capabilities, and comprehensive enterprise system integration.
 
 image:https://img.shields.io/badge/RSR-Certified-gold[RSR Certified,link=https://github.com/hyperpolymath/rhodium-standard-repositories]
-image:https://img.shields.io/badge/License-AGPL%20v3-blue[License]
 image:https://img.shields.io/badge/ReScript-First-e6484f[ReScript]
 image:https://img.shields.io/badge/WASM-Accelerated-654ff0[WASM]
 
