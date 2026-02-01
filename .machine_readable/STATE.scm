@@ -1,4 +1,4 @@
-;; SPDX-License-Identifier: AGPL-3.0-or-later
+;; SPDX-License-Identifier: MPL-2.0-or-later
 ;; STATE.scm - Project state for polyglot-i18n
 ;; Media-Type: application/vnd.state+scm
 
@@ -7,7 +7,7 @@
     (version "0.0.1")
     (schema-version "1.0")
     (created "2026-01-03")
-    (updated "2026-01-03")
+    (updated "2026-02-01")
     (project "polyglot-i18n")
     (repo "github.com/hyperpolymath/polyglot-i18n"))
 

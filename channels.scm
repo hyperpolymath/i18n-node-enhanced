@@ -1,7 +1,7 @@
 ;;; channels.scm --- Guix channel configuration for polyglot-i18n
 ;;;
 ;;; Copyright (C) 2024-2025 polyglot-i18n contributors
-;;; SPDX-License-Identifier: AGPL-3.0-or-later
+;;; SPDX-License-Identifier: MPL-2.0-or-later
 ;;;
 ;;; This file configures the Guix channels required for building and
 ;;; developing polyglot-i18n.
